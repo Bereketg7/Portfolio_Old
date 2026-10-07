@@ -1,0 +1,6 @@
+# Allow all search engines to crawl the whole site
+User-agent: *
+Allow: /
+
+# [REPLACE] Update with your live site address
+Sitemap: https://[REPLACE-username].github.io/portfolio/sitemap.xml

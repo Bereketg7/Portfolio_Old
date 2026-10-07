@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<!--
+  CONCEPT A — NIGHT COCKPIT (recommended)
+  Visual mockup only: one self-contained file. Bootstrap 5, Bootstrap Icons and
+  Google Fonts load from CDN; images come from placehold.co.
+  Open it in a browser, use the sun/moon button to switch themes, and resize
+  the window to see the mobile layout.
+-->
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concept A: Night Cockpit | Bereket Gebremedhin</title>
+
+  <!-- Apply the saved theme before paint (no flash) -->
+  <script>
+    (function () {
+      var t = null; try { t = localStorage.getItem('mockA-theme'); } catch (e) {}
+      document.documentElement.setAttribute('data-bs-theme', t || 'dark');
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    /* ================= TOKENS (from the design system) ================= */
+    :root, [data-bs-theme="light"] {
+      --c-bg: #F6F8FB; --c-surface: #FFFFFF; --c-surface-2: #EEF2F7;
+      --c-border: #D3DBE6; --c-border-strong: #7A869A;
+      --c-text: #13213A; --c-muted: #4A5870;
+      --c-primary: #F5A524; --c-primary-hover: #E0901A; --c-primary-text: #8A4F00; --c-on-primary: #111111;
+      --c-secondary: #1A2840; --c-on-secondary: #FFFFFF;
+      --c-accent: #0E6C86; --c-success: #157F3D; --c-error: #B42318;
+      --c-grid: rgba(19, 33, 58, 0.07);
+      --shadow-md: 0 12px 32px rgba(19, 33, 58, 0.10);
+    }
+    [data-bs-theme="dark"] {
+      --c-bg: #0B1320; --c-surface: #131E30; --c-surface-2: #1A2840;
+      --c-border: #2A3B57; --c-border-strong: #6B7C96;
+      --c-text: #E6EDF6; --c-muted: #A3B1C6;
+      --c-primary: #F5A524; --c-primary-hover: #FFB941; --c-primary-text: #F5B748; --c-on-primary: #111111;
+      --c-secondary: #24364F; --c-on-secondary: #E6EDF6;
+      --c-accent: #5CC8E0; --c-success: #4ADE80; --c-error: #F87171;
+      --c-grid: rgba(230, 237, 246, 0.05);
+      --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.40);
+    }
+    :root {
+      --font-heading: "Space Grotesk", "Inter", system-ui, sans-serif;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      --radius-xs: 4px; --radius-sm: 8px; --radius-md: 14px;
+      --tap: 44px;
+      --ease: cubic-bezier(.2,.7,.2,1);
+    }
+    /* Map Bootstrap onto the tokens */
+    :root, [data-bs-theme] {
+      --bs-body-bg: var(--c-bg); --bs-body-color: var(--c-text);
+      --bs-body-font-family: var(--font-body); --bs-body-line-height: 1.65;
+      --bs-emphasis-color: var(--c-text); --bs-heading-color: var(--c-text);
+      --bs-link-color: var(--c-accent); --bs-link-hover-color: var(--c-text);
+      --bs-border-color: var(--c-border);
+    }
+
+    /* ================= BASE ================= */
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+    body { background: var(--c-bg); color: var(--c-text); transition: background-color .2s, color .2s; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); letter-spacing: -0.01em; }
+    p { max-width: 68ch; }
+    img { max-width: 100%; height: auto; }   /* let aspect-ratio win over the height attribute */
+    :focus-visible { outline: 3px solid var(--c-primary-text); outline-offset: 3px; }
+    .mono { font-family: var(--font-mono); font-size: .75rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--c-muted); }
+    .ink { color: var(--c-primary-text); }
+    .section { padding: 4rem 0; }
+    @media (min-width: 992px) { .section { padding: 6rem 0; } }
+    .section-alt { background: var(--c-surface-2); }
+    .waypoint { color: var(--c-primary-text); display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+    .waypoint::before { content: ""; width: 18px; height: 2px; background: var(--c-primary); }
+    .section-title { font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2.25rem); font-weight: 700; margin-bottom: 2rem; }
+
+    /* ================= CONCEPT LABEL BAR ================= */
+    .concept-bar {
+      background: #F5A524; color: #111; font-size: .85rem; font-weight: 600;
+      padding: .45rem 0;
+    }
+    .concept-bar a { color: #111; font-weight: 700; }
+    .concept-bar .mono { color: #111; }
+
+    /* ================= BUTTONS ================= */
+    .btn { min-height: var(--tap); display: inline-flex; align-items: center; gap: .5rem; font-weight: 600;
+           border-radius: var(--radius-sm); padding: .7rem 1.35rem; transition: background-color .15s, border-color .15s, color .15s, transform .15s; }
+    .btn:active { transform: translateY(1px); }
+    .btn-amber { background: var(--c-primary); border: 2px solid var(--c-primary); color: var(--c-on-primary); }
+    .btn-amber:hover, .btn-amber:focus-visible { background: var(--c-primary-hover); border-color: var(--c-primary-hover); color: var(--c-on-primary); }
+    .btn-amber:hover .bi-arrow-right { transform: translateX(3px); }
+    .btn-amber .bi-arrow-right { transition: transform .15s; }
+    .btn-line { background: transparent; border: 2px solid var(--c-primary); color: var(--c-primary-text); }
+    .btn-line:hover, .btn-line:focus-visible { background: var(--c-primary); color: var(--c-on-primary); border-color: var(--c-primary); }
+    .btn-panel { background: var(--c-secondary); border: 1px solid var(--c-border-strong); color: var(--c-on-secondary); }
+    .btn-panel:hover, .btn-panel:focus-visible { border-color: var(--c-primary); color: var(--c-on-secondary); background: var(--c-secondary); }
+    .btn-sm-card { padding: .45rem .95rem; font-size: .9rem; }
+    .btn-icon { width: var(--tap); height: var(--tap); display: inline-grid; place-items: center; padding: 0;
+                border-radius: 50%; border: 1px solid var(--c-border-strong); background: transparent; color: var(--c-text); font-size: 1.15rem; transition: border-color .15s, color .15s; }
+    .btn-icon:hover { border-color: var(--c-primary); color: var(--c-primary-text); }
+
+    /* ================= NAVBAR ================= */
+    .site-nav { background: color-mix(in srgb, var(--c-bg) 85%, transparent); backdrop-filter: blur(12px);
+                border-bottom: 1px solid transparent; min-height: 72px; transition: min-height .2s, background-color .2s, border-color .2s; }
+    .site-nav.scrolled { min-height: 60px; background: color-mix(in srgb, var(--c-surface) 94%, transparent); border-bottom-color: var(--c-border); }
+    .brand { font-family: var(--font-heading); font-weight: 700; color: var(--c-text) !important; display: flex; align-items: center; gap: .5rem; min-width: 0; }
+    .brand .bi { color: var(--c-primary); font-size: 1.4rem; }
+    .brand-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .site-nav .nav-link { color: var(--c-muted); font-weight: 500; position: relative; min-height: var(--tap); display: flex; align-items: center; padding: 0 .85rem !important; }
+    .site-nav .nav-link:hover { color: var(--c-text); }
+    .site-nav .nav-link.active { color: var(--c-text); }
+    .site-nav .nav-link.active::after { content: ""; position: absolute; left: .85rem; right: .85rem; bottom: 4px; height: 2px; background: var(--c-primary); }
+    .navbar-toggler { border-color: var(--c-border-strong); min-width: var(--tap); min-height: var(--tap); }
+    .annunciator { display: inline-flex; align-items: center; gap: .5rem; min-height: var(--tap); padding: 0 .9rem;
+                   border: 1px solid var(--c-border-strong); border-radius: var(--radius-xs); color: var(--c-text); text-decoration: none;
+                   font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+    .annunciator:hover { border-color: var(--c-primary); color: var(--c-text); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-success); animation: pulse 1.6s ease-in-out 3; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c-success) 25%, transparent); } }
+    .progress-line { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--c-primary); transform-origin: left; transform: scaleX(var(--p, 0)); }
+    @media (max-width: 991.98px) {
+      .site-nav .brand { flex: 1 1 0; }
+      .navbar-collapse { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md); padding: .5rem; margin-top: .5rem; }
+      .site-nav .nav-link { min-height: 48px; }
+    }
+
+    /* ================= HERO ================= */
+    .hero { position: relative; padding: 4.5rem 0 5rem; overflow: hidden; isolation: isolate; }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: -1;
+      background-image: linear-gradient(var(--c-grid) 1px, transparent 1px), linear-gradient(90deg, var(--c-grid) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(ellipse at 75% 35%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse at 75% 35%, #000 25%, transparent 75%); }
+    .hero::after { content: ""; position: absolute; z-index: -1; width: 520px; height: 520px; right: -120px; top: -140px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--c-primary) 14%, transparent), transparent 65%); }
+    .hero-name { font-size: clamp(2.6rem, 1.6rem + 3.8vw, 4.2rem); font-weight: 700; line-height: 1.03; letter-spacing: -0.025em; margin: .75rem 0 1rem; }
+    .hero-statement { font-size: clamp(1.1rem, 1.05rem + .3vw, 1.3rem); margin-bottom: 1.75rem; }
+    .bezel { position: relative; max-width: 330px; margin: 0 auto; padding: .5rem; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md); }
+    .bezel img { display: block; width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius-sm); }
+    .bezel::before, .bezel::after { content: ""; position: absolute; width: 20px; height: 20px; border: 2px solid var(--c-primary); }
+    .bezel::before { top: -6px; left: -6px; border-right: 0; border-bottom: 0; border-top-left-radius: 6px; }
+    .bezel::after { bottom: -6px; right: -6px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; }
+    .bezel-tag { position: absolute; left: 1.1rem; bottom: 1.1rem; background: color-mix(in srgb, var(--c-bg) 85%, transparent); color: var(--c-text);
+                 padding: .3rem .55rem; border-radius: var(--radius-xs); backdrop-filter: blur(6px); }
+    .readouts { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 330px; margin: 1.25rem auto 0; background: var(--c-surface);
+                border: 1px solid var(--c-border); border-radius: var(--radius-sm); }
+    .readouts > div { padding: .9rem .4rem; text-align: center; }
+    .readouts > div + div { border-left: 1px solid var(--c-border); }
+    .readouts dd { margin: .2rem 0 0; font-family: var(--font-heading); font-weight: 700; font-size: 1.35rem; color: var(--c-primary-text); }
+    @media (max-width: 991.98px) { .bezel { max-width: 250px; } .readouts { max-width: 300px; } }
+    @media (max-width: 575.98px) { .hero-actions .btn { width: 100%; justify-content: center; } }
+
+    /* ================= ABOUT ================= */
+    .lede { font-size: 1.2rem; font-weight: 500; }
+    .checks { list-style: none; padding: 0; margin: 1.5rem 0 0; }
+    .checks li { display: flex; gap: .6rem; margin-bottom: .55rem; }
+    .checks .bi { color: var(--c-primary-text); }
+    .flight-log { background: var(--c-surface); border: 1px solid var(--c-border); border-left: 4px solid var(--c-primary); border-radius: var(--radius-md); padding: 1.5rem; }
+    .flight-log dl { margin: 1rem 0 0; }
+    .flight-log dl > div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: .55rem 0; border-top: 1px dashed var(--c-border); }
+    .flight-log dd { margin: 0; }
+
+    /* ================= CARDS ================= */
+    .panel { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md); color: var(--c-text);
+             transition: transform .2s var(--ease), border-color .2s, box-shadow .2s; }
+    .panel-hover:hover, .panel-hover:focus-within { transform: translateY(-3px); border-color: var(--c-primary); box-shadow: var(--shadow-md); }
+
+    /* Skills */
+    .skill { padding: 1.5rem; height: 100%; display: flex; flex-direction: column; }
+    .skill .bi-lg { font-size: 2rem; color: var(--c-primary-text); line-height: 1; margin: .75rem 0 .6rem; }
+    .skill h3 { font-size: 1.1rem; font-family: var(--font-body); font-weight: 600; margin-bottom: 1rem; }
+    .badges { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: .45rem; }
+    .badges li { padding: .25rem .75rem; border-radius: 999px; background: var(--c-surface-2); border: 1px solid var(--c-border); font-size: .84rem; font-weight: 500; }
+    .usage { margin-top: auto; padding-top: .9rem; border-top: 1px dashed var(--c-border); display: flex; justify-content: space-between; align-items: center; }
+    .meter { display: inline-flex; gap: 3px; }
+    .meter i { width: 14px; height: 4px; border-radius: 2px; background: var(--c-border); display: block; }
+    .meter i.on { background: var(--c-primary); }
+
+    /* Projects */
+    .filters { display: flex; gap: .5rem; align-items: center; overflow-x: auto; margin-bottom: 2rem; padding-bottom: .25rem; }
+    .chip-filter { flex: none; min-height: var(--tap); padding: 0 1.1rem; border-radius: 999px; border: 1px solid var(--c-border-strong); background: transparent; color: var(--c-muted); font-weight: 500; }
+    .chip-filter:hover { color: var(--c-text); border-color: var(--c-primary); }
+    .chip-filter[aria-pressed="true"] { background: var(--c-primary); border-color: var(--c-primary); color: var(--c-on-primary); font-weight: 600; }
+    .project { overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+    .project-media { margin: .5rem .5rem 0; padding: .5rem; background: var(--c-surface-2); border-radius: 10px; overflow: hidden; }
+    .project-media img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: var(--radius-sm); transition: transform .3s var(--ease); }
+    .project:hover .project-media img { transform: scale(1.03); }
+    .project-body { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+    .project h3 { font-size: 1.25rem; margin: .4rem 0 .5rem; }
+    .project p { color: var(--c-muted); }
+    .tag { display: inline-block; padding: 2px .45rem; border-radius: var(--radius-xs); border: 1px solid var(--c-primary); color: var(--c-primary-text);
+           font-family: var(--font-mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; vertical-align: middle; }
+    .spec { margin: 0 0 1.25rem; font-size: .9rem; }
+    .spec > div { display: grid; grid-template-columns: 4.5rem 1fr; gap: .5rem; padding: .4rem 0; border-top: 1px dashed var(--c-border); }
+    .spec dt { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--c-muted); font-weight: 500; align-self: center; }
+    .spec dd { margin: 0; }
+    .spec .result dd { font-weight: 600; color: var(--c-text); }
+    .actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: .5rem; }
+    @media (min-width: 992px) {
+      .project-featured { flex-direction: row; }
+      .project-featured .project-media { flex: 0 0 56%; margin: .5rem 0 .5rem .5rem; }
+      .project-featured .project-media img { height: 100%; aspect-ratio: auto; min-height: 320px; }
+      .project-featured .project-body { padding: 2rem; }
+      .project-featured h3 { font-size: 1.6rem; }
+    }
+
+    /* Experience timeline */
+    .route { --x: 7px; list-style: none; padding: 0; margin: 0; position: relative; }
+    .route::before { content: ""; position: absolute; left: calc(var(--x) - 1px); top: 6px; bottom: 6px; width: 2px; background: var(--c-border-strong); }
+    .route-item { position: relative; padding: 0 0 2rem 2.75rem; }
+    .route-item:last-child { padding-bottom: 0; }
+    .route-date { color: var(--c-accent); margin-bottom: .5rem; }
+    .diamond { position: absolute; left: calc(var(--x) - 7px); top: 3px; width: 14px; height: 14px; transform: rotate(45deg);
+               background: var(--c-bg); border: 2px solid var(--c-primary); }
+    .route-item.now .diamond { background: var(--c-primary); box-shadow: 0 0 0 4px var(--c-bg); }
+    .route-card { padding: 1.5rem; }
+    .route-card h3 { font-size: 1.15rem; margin-bottom: .2rem; }
+    .route-card .org { color: var(--c-muted); margin-bottom: .8rem; }
+    .route-card ul { margin: 0; padding-left: 1.1rem; }
+    .route-card li { margin-bottom: .35rem; }
+    .route-card li strong { color: var(--c-primary-text); }
+    @media (min-width: 768px) {
+      .route { --x: 11rem; }
+      .route-item { display: grid; grid-template-columns: 9.5rem 1fr; column-gap: 3rem; padding-left: 0; }
+      .route-date { text-align: right; padding-top: 1.55rem; margin: 0; }
+      .diamond { top: calc(1.5rem + 3px); }
+    }
+
+    /* Education checklist */
+    .cred { padding: 1.5rem; height: 100%; }
+    .cred h3 { font-size: 1.1rem; font-family: var(--font-body); font-weight: 600; display: flex; gap: .5rem; align-items: center; }
+    .cred h3 .bi { color: var(--c-primary-text); }
+    .checklist { list-style: none; padding: 0; margin: .5rem 0 0; }
+    .checklist li { display: grid; grid-template-columns: 1.75rem 1fr; gap: .5rem; padding: .9rem 0; border-top: 1px dashed var(--c-border); }
+    .checklist li:first-child { border-top: 0; }
+    .checklist .bi { font-size: 1.2rem; line-height: 1.3; }
+    .checklist .done .bi { color: var(--c-success); }
+    .checklist .pending .bi { color: var(--c-primary-text); }
+    .checklist small { display: block; color: var(--c-muted); font-size: .92rem; }
+
+    /* Contact */
+    .contact-panel { padding: 1.5rem; }
+    @media (min-width: 992px) { .contact-panel { padding: 2rem; } }
+    .form-label { font-weight: 500; font-size: .9rem; }
+    .form-control { min-height: 48px; background: var(--c-surface); color: var(--c-text); border: 1px solid var(--c-border-strong); border-radius: var(--radius-sm); font-size: 1rem; }
+    .form-control::placeholder { color: var(--c-muted); opacity: .8; }
+    .form-control:hover { border-color: color-mix(in srgb, var(--c-text) 60%, transparent); }
+    .form-control:focus { background: var(--c-surface); color: var(--c-text); border-color: var(--c-primary-text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 25%, transparent); }
+    .was-validated .form-control:invalid { border-color: var(--c-error); }
+    .was-validated .form-control:valid { border-color: var(--c-success); }
+    .invalid-feedback { color: var(--c-error); }
+    .form-ok { display: none; gap: .5rem; align-items: center; margin-top: 1rem; padding: .85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--c-success); background: color-mix(in srgb, var(--c-success) 12%, transparent); font-weight: 500; }
+    .form-ok.show { display: flex; }
+    .form-ok .bi { color: var(--c-success); }
+    .socials { display: flex; gap: .75rem; margin-top: 1.5rem; }
+    .socials a { width: var(--tap); height: var(--tap); display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--c-border-strong); color: var(--c-text); font-size: 1.15rem; text-decoration: none; transition: .15s; }
+    .socials a:hover { background: var(--c-primary); border-color: var(--c-primary); color: var(--c-on-primary); }
+    .email-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; font-size: 1.05rem; }
+    .email-row a { font-weight: 600; display: inline-flex; align-items: center; min-height: var(--tap); }
+
+    /* Footer */
+    .site-footer { border-top: 1px solid var(--c-border); padding: 2rem 0; color: var(--c-muted); font-size: .9rem; }
+    .site-footer p { margin: 0; max-width: none; }
+
+    /* Reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .dot { animation: none; }
+      .panel-hover:hover, .project:hover .project-media img { transform: none; }
+    }
+  </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#nav" data-bs-root-margin="0px 0px -40%">
+
+  <!-- Concept label (mockup only) -->
+  <div class="concept-bar">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span><span class="mono">Approved mockup</span> &nbsp;Concept A · Night Cockpit</span>
+      <span>Design reference — sample content, not the live site</span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="nav" class="navbar navbar-expand-lg sticky-top site-nav" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand brand flex-grow-1 flex-lg-grow-0" href="#home">
+        <i class="bi bi-airplane-engines" aria-hidden="true"></i>
+        <span class="brand-name">Bereket Gebremedhin</span>
+        <span class="mono d-none d-sm-inline">Sim Eng</span>
+      </a>
+      <div class="d-flex align-items-center gap-2 order-lg-last">
+        <a class="annunciator d-none d-lg-inline-flex" href="#contact"><span class="dot" aria-hidden="true"></span>Available</a>
+        <button class="btn-icon" id="themeToggle" type="button" aria-label="Switch to light mode"><i class="bi bi-sun" aria-hidden="true"></i></button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#links" aria-controls="links" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="links">
+        <ul class="navbar-nav ms-auto me-lg-3">
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#education">Credentials</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="progress-line" aria-hidden="true"></div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7 reveal">
+            <p class="mono ink mb-0"><i class="bi bi-geo-alt" aria-hidden="true"></i> N 32.78° W 96.80° · Dallas, TX</p>
+            <h1 class="hero-name">Bereket<br>Gebremedhin</h1>
+            <p class="hero-statement">I keep full-flight simulators training-ready, and I build the software that helps technical teams work faster.</p>
+            <div class="d-flex flex-wrap gap-3 hero-actions">
+              <a href="#projects" class="btn btn-amber btn-lg">View projects <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+              <a href="#" class="btn btn-line btn-lg"><i class="bi bi-download" aria-hidden="true"></i> Download resume</a>
+            </div>
+            <p class="mono mt-4 mb-0">Aircraft Simulator Engineer @ CAE · Full-Stack Developer</p>
+          </div>
+          <div class="col-lg-5 reveal">
+            <div class="bezel">
+              <img src="https://placehold.co/480x600/1A2840/F5B748?text=Your+portrait%5Cn4%3A5&font=inter" width="480" height="600" alt="Portrait placeholder">
+              <span class="bezel-tag mono">CAM 01 · DFW</span>
+            </div>
+            <dl class="readouts">
+              <div><dt class="mono">Years</dt><dd>03+</dd></div>
+              <div><dt class="mono">Sims</dt><dd>06</dd></div>
+              <div><dt class="mono">GROL</dt><dd>2026</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 ABOUT -->
+    <section id="about" class="section section-alt">
+      <div class="container">
+        <p class="waypoint mono reveal">01 / About</p>
+        <h2 class="section-title reveal">Briefing</h2>
+        <div class="row g-4 g-lg-5">
+          <div class="col-lg-7 reveal">
+            <p class="lede">I'm an aircraft simulator engineer at CAE in Dallas. I troubleshoot, maintain and validate the full-flight simulators airline pilots train on.</p>
+            <p>My days are spent tracing faults across motion, visual, avionics and host systems, then writing them up so the next shift can move fast. Outside the sim bay I build full-stack web tools, and I'm studying for the FCC General Radiotelephone Operator License.</p>
+            <ul class="checks">
+              <li><i class="bi bi-check2-square" aria-hidden="true"></i> Tracing intermittent faults to a single root cause</li>
+              <li><i class="bi bi-check2-square" aria-hidden="true"></i> Clear documentation the next shift can act on</li>
+              <li><i class="bi bi-check2-square" aria-hidden="true"></i> Turning manual processes into simple web tools</li>
+            </ul>
+          </div>
+          <div class="col-lg-5 reveal">
+            <div class="flight-log">
+              <p class="mono mb-0">Flight log</p>
+              <dl>
+                <div><dt class="mono">Current</dt><dd>Aircraft Simulator Engineer, CAE</dd></div>
+                <div><dt class="mono">Focus</dt><dd>Motion · Visuals · Avionics</dd></div>
+                <div><dt class="mono">Base</dt><dd>Dallas, TX</dd></div>
+                <div><dt class="mono">Studying</dt><dd>FCC GROL, Elements 1 &amp; 3</dd></div>
+                <div><dt class="mono">Open to</dt><dd>Simulator technician &amp; engineer roles</dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 SKILLS -->
+    <section id="skills" class="section">
+      <div class="container">
+        <p class="waypoint mono reveal">02 / Skills</p>
+        <h2 class="section-title reveal">Systems I work on</h2>
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-xl-3 reveal">
+            <div class="panel panel-hover skill">
+              <span class="mono">SYS 01</span>
+              <i class="bi bi-speedometer2 bi-lg" aria-hidden="true"></i>
+              <h3>Simulation &amp; avionics</h3>
+              <ul class="badges"><li>Full-flight simulators</li><li>Motion &amp; control loading</li><li>Visual systems</li><li>Avionics troubleshooting</li></ul>
+              <div class="usage"><span class="mono">Daily</span><span class="meter" aria-label="Daily use"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3 reveal">
+            <div class="panel panel-hover skill">
+              <span class="mono">SYS 02</span>
+              <i class="bi bi-cpu bi-lg" aria-hidden="true"></i>
+              <h3>Electronics &amp; systems</h3>
+              <ul class="badges"><li>Schematics &amp; wiring</li><li>Oscilloscope / DMM</li><li>TCP/IP networking</li><li>Linux</li><li>RF fundamentals</li></ul>
+              <div class="usage"><span class="mono">Daily</span><span class="meter" aria-label="Daily use"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3 reveal">
+            <div class="panel panel-hover skill">
+              <span class="mono">SYS 03</span>
+              <i class="bi bi-code-slash bi-lg" aria-hidden="true"></i>
+              <h3>Software</h3>
+              <ul class="badges"><li>JavaScript</li><li>Node.js</li><li>Python</li><li>SQL</li><li>Bootstrap</li><li>Git</li></ul>
+              <div class="usage"><span class="mono">In projects</span><span class="meter" aria-label="Regular use"><i class="on"></i><i class="on"></i><i></i></span></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3 reveal">
+            <div class="panel panel-hover skill">
+              <span class="mono">SYS 04</span>
+              <i class="bi bi-people bi-lg" aria-hidden="true"></i>
+              <h3>Professional</h3>
+              <ul class="badges"><li>Root-cause analysis</li><li>Technical writing</li><li>Shift handover</li><li>Customer support</li></ul>
+              <div class="usage"><span class="mono">Every shift</span><span class="meter" aria-label="Daily use"><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 PROJECTS -->
+    <section id="projects" class="section section-alt">
+      <div class="container">
+        <p class="waypoint mono reveal">03 / Projects</p>
+        <h2 class="section-title reveal">Selected work</h2>
+        <div class="filters reveal" role="group" aria-label="Filter projects">
+          <span class="mono me-1">Mode</span>
+          <button class="chip-filter" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="chip-filter" type="button" data-filter="simulation" aria-pressed="false">Simulation</button>
+          <button class="chip-filter" type="button" data-filter="web" aria-pressed="false">Web</button>
+          <button class="chip-filter" type="button" data-filter="data" aria-pressed="false">Data</button>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 project-col reveal" data-cat="simulation web">
+            <article class="panel panel-hover project project-featured">
+              <div class="project-media"><img src="https://placehold.co/1200x675/131E30/5CC8E0?text=Sim+Telemetry+Dashboard&font=inter" width="1200" height="675" alt="Sim Telemetry Dashboard screenshot placeholder"></div>
+              <div class="project-body">
+                <p class="mono mb-0">Fig. 01 · Simulation &nbsp;<span class="tag">Featured</span></p>
+                <h3>Sim Telemetry Dashboard</h3>
+                <p>A live browser dashboard that shows motion, visual and host health for a simulator on one screen, with thresholds that flag drift before it becomes a fault.</p>
+                <dl class="spec">
+                  <div><dt>Stack</dt><dd>JavaScript · Chart.js · Python · WebSockets</dd></div>
+                  <div><dt>Role</dt><dd>Solo developer</dd></div>
+                  <div class="result"><dt>Result</dt><dd>Pre-session check: 10 min → 2 min</dd></div>
+                </dl>
+                <div class="actions">
+                  <a href="#" class="btn btn-panel btn-sm-card"><i class="bi bi-journal-text" aria-hidden="true"></i> Case study</a>
+                  <a href="#" class="btn btn-line btn-sm-card"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                  <a href="#" class="btn btn-amber btn-sm-card"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Live</a>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="col-12 col-md-6 project-col reveal" data-cat="data simulation">
+            <article class="panel panel-hover project">
+              <div class="project-media"><img src="https://placehold.co/1200x675/131E30/5CC8E0?text=Fault+Log+Analyzer&font=inter" width="1200" height="675" loading="lazy" alt="Fault Log Analyzer screenshot placeholder"></div>
+              <div class="project-body">
+                <p class="mono mb-0">Fig. 02 · Data</p>
+                <h3>Fault Log Analyzer</h3>
+                <p>Parses simulator fault logs and ranks repeat offenders, so fixes target root causes instead of symptoms.</p>
+                <dl class="spec">
+                  <div><dt>Stack</dt><dd>Python · pandas · SQLite</dd></div>
+                  <div><dt>Role</dt><dd>Solo developer</dd></div>
+                  <div class="result"><dt>Result</dt><dd>3 faults = 40% of events found</dd></div>
+                </dl>
+                <div class="actions">
+                  <a href="#" class="btn btn-line btn-sm-card"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="col-12 col-md-6 project-col reveal" data-cat="simulation web">
+            <article class="panel panel-hover project">
+              <div class="project-media"><img src="https://placehold.co/1200x675/131E30/5CC8E0?text=Web+Instrument+Panel&font=inter" width="1200" height="675" loading="lazy" alt="Web Instrument Panel screenshot placeholder"></div>
+              <div class="project-body">
+                <p class="mono mb-0">Fig. 03 · Simulation</p>
+                <h3>Web Instrument Panel</h3>
+                <p>Attitude indicator, altimeter and airspeed gauges drawn in SVG and driven by live or recorded sim data.</p>
+                <dl class="spec">
+                  <div><dt>Stack</dt><dd>SVG · JavaScript · CSS</dd></div>
+                  <div><dt>Role</dt><dd>Solo developer</dd></div>
+                  <div class="result"><dt>Result</dt><dd>60 fps on a mid-range phone</dd></div>
+                </dl>
+                <div class="actions">
+                  <a href="#" class="btn btn-line btn-sm-card"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                  <a href="#" class="btn btn-amber btn-sm-card"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Live</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 EXPERIENCE -->
+    <section id="experience" class="section">
+      <div class="container">
+        <p class="waypoint mono reveal">04 / Experience</p>
+        <h2 class="section-title reveal">Flight path</h2>
+        <ol class="route">
+          <li class="route-item now reveal">
+            <p class="route-date mono">2023 – Now</p>
+            <span class="diamond" aria-hidden="true"></span>
+            <div class="panel route-card">
+              <h3>Aircraft Simulator Engineer</h3>
+              <p class="org">CAE · Dallas, TX</p>
+              <ul>
+                <li>Maintain and troubleshoot full-flight simulators across motion, visual, avionics and host systems.</li>
+                <li>Cut repeat-fault downtime by <strong>30%</strong> by tracing intermittent faults to root cause and documenting fixes.</li>
+                <li>Support qualification checks so airline training schedules stay on time.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="route-item reveal">
+            <p class="route-date mono">2020 – 2023</p>
+            <span class="diamond" aria-hidden="true"></span>
+            <div class="panel route-card">
+              <h3>Electronics Technician</h3>
+              <p class="org">Avionics repair station · Fort Worth, TX</p>
+              <ul>
+                <li>Repaired and tested <strong>200+</strong> avionics boards with a 95% first-pass yield.</li>
+                <li>Wrote bench-test procedures adopted by the whole repair team.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="route-item reveal">
+            <p class="route-date mono">2024 – Now</p>
+            <span class="diamond" aria-hidden="true"></span>
+            <div class="panel route-card">
+              <h3>Full-stack development</h3>
+              <p class="org">Personal projects</p>
+              <ul>
+                <li>Built and deployed <strong>6</strong> web apps with JavaScript, Node.js, Python and SQL.</li>
+                <li>Completed AI-powered full-stack training: front end, APIs, databases and deployment.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 05 EDUCATION -->
+    <section id="education" class="section section-alt">
+      <div class="container">
+        <p class="waypoint mono reveal">05 / Credentials</p>
+        <h2 class="section-title reveal">Checklist</h2>
+        <div class="row g-4">
+          <div class="col-12 col-md-6 reveal">
+            <div class="panel cred">
+              <h3><i class="bi bi-mortarboard" aria-hidden="true"></i> Education</h3>
+              <ul class="checklist">
+                <li class="done"><i class="bi bi-check2-square" aria-hidden="true"></i><div><strong>A.A.S. Electronics Engineering Technology</strong><small>Community college · 2020</small></div></li>
+                <li class="done"><i class="bi bi-check2-square" aria-hidden="true"></i><div><strong>AI-Powered Full-Stack Development</strong><small>Online training program · 2026</small></div></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 reveal">
+            <div class="panel cred">
+              <h3><i class="bi bi-patch-check" aria-hidden="true"></i> Certifications</h3>
+              <ul class="checklist">
+                <li class="pending"><i class="bi bi-hourglass-split" aria-hidden="true"></i><div><strong>FCC GROL, Elements 1 &amp; 3</strong> <span class="tag">In progress</span><small>Target: December 2026</small></div></li>
+                <li class="done"><i class="bi bi-check2-square" aria-hidden="true"></i><div><strong>CompTIA A+</strong><small>CompTIA · 2021</small></div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 CONTACT -->
+    <section id="contact" class="section">
+      <div class="container">
+        <p class="waypoint mono reveal">06 / Contact</p>
+        <h2 class="section-title reveal">Open a channel</h2>
+        <div class="row g-4 g-lg-5">
+          <div class="col-lg-5 reveal">
+            <p class="fs-5">Hiring for simulator, avionics or software roles? I'd like to hear from you.</p>
+            <div class="email-row"><i class="bi bi-envelope" aria-hidden="true"></i><a href="#">hello@yourname.dev</a>
+              <button class="btn-icon" type="button" aria-label="Copy email address"><i class="bi bi-copy" aria-hidden="true"></i></button></div>
+            <p class="mono mt-4 mb-1">Response time</p>
+            <p><strong>Within 48 hours</strong></p>
+            <div class="socials">
+              <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+              <a href="#" aria-label="GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
+              <a href="#" aria-label="YouTube"><i class="bi bi-youtube" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-7 reveal">
+            <form class="panel contact-panel" id="form" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6"><label class="form-label" for="n">Name</label><input class="form-control" id="n" required placeholder="Jane Smith"><div class="invalid-feedback">Please enter your name.</div></div>
+                <div class="col-md-6"><label class="form-label" for="e">Email</label><input class="form-control" id="e" type="email" required placeholder="jane@airline.com"><div class="invalid-feedback">Please enter a valid email.</div></div>
+                <div class="col-12"><label class="form-label" for="s">Subject</label><input class="form-control" id="s" required placeholder="Simulator technician role"><div class="invalid-feedback">Please add a subject.</div></div>
+                <div class="col-12"><label class="form-label" for="m">Message</label><textarea class="form-control" id="m" rows="5" required minlength="10" placeholder="Tell me about the role or project…"></textarea><div class="invalid-feedback">At least 10 characters, please.</div></div>
+                <div class="col-12"><button class="btn btn-amber btn-lg" type="submit"><i class="bi bi-send" aria-hidden="true"></i> Send message</button></div>
+              </div>
+              <div class="form-ok" id="ok" role="status"><i class="bi bi-check-circle" aria-hidden="true"></i> Message sent (mockup). I'll reply within 48 hours.</div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center">
+      <p class="mono">Bereket Gebremedhin · End of flight plan</p>
+      <p>© 2026 · Built with HTML, CSS &amp; Bootstrap</p>
+      <a href="#home" class="fw-semibold text-decoration-none d-inline-flex align-items-center" style="min-height:44px"><i class="bi bi-arrow-up" aria-hidden="true"></i>&nbsp;Back to top</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      // Theme toggle
+      var btn = document.getElementById('themeToggle');
+      function sync() {
+        var dark = root.getAttribute('data-bs-theme') === 'dark';
+        btn.innerHTML = '<i class="bi ' + (dark ? 'bi-sun' : 'bi-moon-stars') + '" aria-hidden="true"></i>';
+        btn.setAttribute('aria-label', 'Switch to ' + (dark ? 'light' : 'dark') + ' mode');
+      }
+      btn.addEventListener('click', function () {
+        var next = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-bs-theme', next);
+        try { localStorage.setItem('mockA-theme', next); } catch (e) {}
+        sync();
+      });
+      sync();
+      // Navbar shrink + progress line
+      var nav = document.getElementById('nav');
+      function onScroll() {
+        var max = document.documentElement.scrollHeight - innerHeight;
+        nav.classList.toggle('scrolled', scrollY > 24);
+        nav.style.setProperty('--p', max > 0 ? scrollY / max : 0);
+      }
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      // Reveal on scroll
+      var els = document.querySelectorAll('.reveal');
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('in'); });
+      } else {
+        var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .1 });
+        els.forEach(function (el) { io.observe(el); });
+      }
+      // Project filter
+      var chips = document.querySelectorAll('.chip-filter');
+      chips.forEach(function (c) {
+        c.addEventListener('click', function () {
+          var f = c.dataset.filter;
+          chips.forEach(function (x) { x.setAttribute('aria-pressed', String(x === c)); });
+          document.querySelectorAll('.project-col').forEach(function (p) {
+            p.classList.toggle('d-none', !(f === 'all' || p.dataset.cat.split(' ').indexOf(f) > -1));
+          });
+        });
+      });
+      // Form (mockup: validates, then shows the success state)
+      var form = document.getElementById('form');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!form.checkValidity()) { form.classList.add('was-validated'); form.querySelector(':invalid').focus(); return; }
+        document.getElementById('ok').classList.add('show');
+      });
+    })();
+  </script>
+</body>
+</html>

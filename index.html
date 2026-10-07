@@ -1,0 +1,1238 @@
+<!doctype html>
+<!--
+  ==========================================================================
+  PERSONAL PORTFOLIO — index.html  ("Night Cockpit" design)
+  --------------------------------------------------------------------------
+  HTML5 + Bootstrap 5.3 (CDN) + a little vanilla JS. No build step.
+  Search this file for "[REPLACE]" to find every placeholder to edit.
+  Page order: Navbar → Hero → 01 About → 02 Skills → 03 Projects →
+              04 Experience → 05 Credentials → 06 Contact → Footer
+  Styles: css/tokens.css (colors, fonts, sizes) + css/style.css (components)
+  Design reference: docs/DESIGN-SYSTEM.md
+  ==========================================================================
+-->
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ===== SEO: title + description (shown in Google results) ===== -->
+    <title>Bereket Gebremedhin | Aircraft Simulator Engineer</title>
+    <meta
+      name="description"
+      content="Bereket Gebremedhin is an aircraft simulator engineer in Dallas, TX who keeps full-flight simulators training-ready and builds web tools for technical teams."
+    />
+    <meta name="author" content="Bereket Gebremedhin" />
+    <link
+      rel="canonical"
+      href="https://[REPLACE-username].github.io/portfolio/"
+    />
+
+    <!-- ===== Open Graph: the preview card on LinkedIn, Slack, etc. ===== -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Bereket Gebremedhin | Aircraft Simulator Engineer"
+    />
+    <meta
+      property="og:description"
+      content="Flight simulator engineering meets full-stack development. Projects, experience, and contact."
+    />
+    <meta
+      property="og:url"
+      content="https://[REPLACE-username].github.io/portfolio/"
+    />
+    <meta
+      property="og:image"
+      content="https://[REPLACE-username].github.io/portfolio/assets/images/og-image.png"
+    />
+    <meta
+      property="og:image:alt"
+      content="Portfolio preview card for Bereket Gebremedhin"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- ===== Favicon ===== -->
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+
+    <!-- Browser UI color on mobile (matches --c-bg in each theme) -->
+    <meta
+      name="theme-color"
+      content="#0B1320"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#F6F8FB"
+      media="(prefers-color-scheme: light)"
+    />
+
+    <!--
+    Apply the saved theme BEFORE anything paints (prevents a flash of the
+    wrong theme). First visit: follow the operating-system setting.
+  -->
+    <script>
+      (function () {
+        var saved = null;
+        try {
+          saved = localStorage.getItem("theme");
+        } catch (e) {}
+        var prefersLight =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: light)").matches;
+        document.documentElement.setAttribute(
+          "data-bs-theme",
+          saved || (prefersLight ? "light" : "dark"),
+        );
+        document.documentElement.classList.add("js"); // tells CSS that JS runs (enables fade-ins)
+      })();
+    </script>
+
+    <!-- ===== Google Fonts: Space Grotesk (headings), Inter (body), JetBrains Mono (labels) ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ===== Bootstrap 5 + Bootstrap Icons (CDN) ===== -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- ===== Design tokens first, then components (order matters) ===== -->
+    <link href="css/tokens.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+
+  <!-- Bootstrap ScrollSpy highlights the navbar link of the section on screen -->
+  <body
+    data-bs-spy="scroll"
+    data-bs-target="#mainNav"
+    data-bs-root-margin="0px 0px -40%"
+  >
+    <!-- Skip link for keyboard and screen-reader users -->
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <!-- =====================================================================
+       NAVBAR — sticky; shrinks on scroll; amber progress line at the bottom
+       ===================================================================== -->
+    <header>
+      <nav
+        id="mainNav"
+        class="navbar navbar-expand-lg sticky-top site-nav"
+        aria-label="Main navigation"
+      >
+        <div class="container">
+          <a class="navbar-brand brand" href="#home">
+            <i class="bi bi-airplane-engines" aria-hidden="true"></i>
+            <span class="brand-name">Bereket Gebremedhin</span>
+            <span class="label-mono brand-role">Sim Eng</span>
+          </a>
+
+          <div class="d-flex align-items-center gap-2 order-lg-last">
+            <!-- Availability "annunciator" (desktop). Delete it if you're not looking. -->
+            <a class="annunciator d-none d-lg-inline-flex" href="#contact">
+              <span class="dot" aria-hidden="true"></span> Available
+            </a>
+            <!-- Light / dark toggle (icon + label kept in sync by js/main.js) -->
+            <button
+              id="themeToggle"
+              class="btn-icon"
+              type="button"
+              aria-label="Switch to light mode"
+            >
+              <i class="bi bi-sun" aria-hidden="true"></i>
+            </button>
+            <!-- Hamburger (below 992px) -->
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navLinks"
+              aria-controls="navLinks"
+              aria-expanded="false"
+              aria-label="Toggle navigation menu"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+
+          <div class="collapse navbar-collapse" id="navLinks">
+            <ul class="navbar-nav ms-auto me-lg-3">
+              <li class="nav-item">
+                <a class="nav-link" href="#about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#skills">Skills</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#projects">Projects</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#experience">Experience</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#education">Credentials</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact">Contact</a>
+              </li>
+            </ul>
+            <!-- Mobile version of the annunciator: a full-width button -->
+            <a
+              class="btn btn-secondary w-100 mt-2 d-lg-none justify-content-center"
+              href="#contact"
+            >
+              <span class="annunciator-dot-inline" aria-hidden="true">●</span>
+              Available · Contact me
+            </a>
+          </div>
+        </div>
+        <div class="nav-progress" aria-hidden="true"></div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <!-- =====================================================================
+         HERO — name, value statement, CTAs; portrait in a "display bezel"
+         ===================================================================== -->
+      <section id="home" class="hero" aria-labelledby="hero-title">
+        <div class="container">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-7 reveal">
+              <p class="label-mono text-primary-ink mb-3">
+                <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                N 32.78° W 96.80° · Dallas, TX
+              </p>
+              <h1 id="hero-title" class="hero-name">
+                Bereket<br />Gebremedhin
+              </h1>
+              <p class="hero-statement">
+                I keep full-flight simulators training-ready, and I build the
+                software that helps technical teams work faster.
+              </p>
+              <div class="d-flex flex-wrap gap-3 hero-actions">
+                <a href="#projects" class="btn btn-primary btn-lg">
+                  View projects
+                  <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+                <!-- [REPLACE] Put your real resume at this path, or change the href -->
+                <a
+                  href="assets/resume/Bereket-Gebremedhin-Resume.pdf"
+                  class="btn btn-outline-primary btn-lg"
+                  download
+                >
+                  <i class="bi bi-download" aria-hidden="true"></i> Download
+                  resume
+                </a>
+              </div>
+              <p class="hero-role label-mono">
+                Aircraft Simulator Engineer @ CAE · Full-Stack Developer
+              </p>
+            </div>
+
+            <div class="col-lg-5 reveal">
+              <div class="bezel">
+                <!-- [REPLACE] Your portrait: 4:5 ratio (e.g. 800x1000), .webp or .jpg. Not lazy: it's above the fold. -->
+                <img
+                  src="assets/images/profile.svg"
+                  width="480"
+                  height="600"
+                  alt="Portrait of Bereket Gebremedhin"
+                />
+                <span class="bezel-tag label-mono" aria-hidden="true"
+                  >CAM 01 · DFW</span
+                >
+              </div>
+              <!-- Readouts: three real numbers recruiters scan for -->
+              <dl class="readouts">
+                <div>
+                  <dt class="label-mono">Years</dt>
+                  <dd>03+</dd>
+                  <!-- [REPLACE] years -->
+                </div>
+                <div>
+                  <dt class="label-mono">Sims</dt>
+                  <dd>06</dd>
+                  <!-- [REPLACE] simulators supported -->
+                </div>
+                <div>
+                  <dt class="label-mono">GROL</dt>
+                  <dd>In prog</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+         01 / ABOUT — bio + "flight log" key facts
+         ===================================================================== -->
+      <section
+        id="about"
+        class="section section-alt"
+        aria-labelledby="about-title"
+      >
+        <div class="container">
+          <p class="waypoint-label label-mono reveal">01 / About</p>
+          <h2 id="about-title" class="section-title reveal">Briefing</h2>
+          <div class="row g-4 g-lg-5">
+            <div class="col-lg-7 reveal">
+              <!-- [REPLACE] Your bio: 2–3 short paragraphs -->
+              <p class="about-lede">
+                I'm an aircraft simulator engineer at CAE in Dallas. I
+                troubleshoot, maintain and validate the full-flight simulators
+                airline pilots train on.
+              </p>
+              <p>
+                [REPLACE: one sentence on your specialty, e.g. motion and
+                control loading, visual systems, avionics, or host software.]
+                Outside the sim bay I build full-stack web apps, and I'm working
+                toward my FCC GROL license.
+              </p>
+              <ul class="check-list">
+                <li>
+                  <i class="bi bi-check2-square" aria-hidden="true"></i> Tracing
+                  intermittent faults to a single root cause
+                </li>
+                <li>
+                  <i class="bi bi-check2-square" aria-hidden="true"></i> Clear
+                  documentation the next shift can act on
+                </li>
+                <li>
+                  <i class="bi bi-check2-square" aria-hidden="true"></i> Turning
+                  manual processes into simple web tools
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-5 reveal">
+              <div class="flight-log">
+                <p class="label-mono mb-0">Flight log</p>
+                <dl>
+                  <div>
+                    <dt class="label-mono">Current</dt>
+                    <dd>Aircraft Simulator Engineer, CAE</dd>
+                  </div>
+                  <div>
+                    <dt class="label-mono">Focus</dt>
+                    <dd>[REPLACE: Motion · Visuals · Avionics]</dd>
+                  </div>
+                  <div>
+                    <dt class="label-mono">Base</dt>
+                    <dd>Dallas, TX</dd>
+                  </div>
+                  <div>
+                    <dt class="label-mono">Studying</dt>
+                    <dd>FCC GROL, Elements 1 &amp; 3</dd>
+                  </div>
+                  <div>
+                    <dt class="label-mono">Languages</dt>
+                    <dd>English · [REPLACE]</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+         02 / SKILLS — grouped like aircraft systems (SYS 01–04)
+         Edit badges inside each .badge-list; edit the usage line under each.
+         ===================================================================== -->
+      <section id="skills" class="section" aria-labelledby="skills-title">
+        <div class="container">
+          <p class="waypoint-label label-mono reveal">02 / Skills</p>
+          <h2 id="skills-title" class="section-title reveal">
+            Systems I work on
+          </h2>
+          <div class="row g-4 stagger">
+            <div class="col-12 col-md-6 col-xl-3 reveal">
+              <div class="card skill-card h-100">
+                <div class="card-body d-flex flex-column">
+                  <span class="label-mono sys-label">SYS 01</span>
+                  <i
+                    class="bi bi-speedometer2 skill-icon"
+                    aria-hidden="true"
+                  ></i>
+                  <h3 class="h5">Simulation &amp; avionics</h3>
+                  <ul
+                    class="badge-list"
+                    aria-label="Simulation and avionics skills"
+                  >
+                    <li>Full-flight simulators</li>
+                    <li>Motion &amp; control loading</li>
+                    <li>Visual systems</li>
+                    <li>Avionics troubleshooting</li>
+                    <li>[REPLACE: aircraft type]</li>
+                  </ul>
+                  <p class="skill-usage label-mono mb-0">
+                    <span>Daily at work</span
+                    ><span
+                      class="meter"
+                      role="img"
+                      aria-label="Daily at work: 3 of 3"
+                      ><i class="on"></i><i class="on"></i><i class="on"></i
+                    ></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3 reveal">
+              <div class="card skill-card h-100">
+                <div class="card-body d-flex flex-column">
+                  <span class="label-mono sys-label">SYS 02</span>
+                  <i class="bi bi-cpu skill-icon" aria-hidden="true"></i>
+                  <h3 class="h5">Electronics &amp; systems</h3>
+                  <ul
+                    class="badge-list"
+                    aria-label="Electronics and systems skills"
+                  >
+                    <li>Schematics &amp; wiring</li>
+                    <li>Oscilloscope / DMM</li>
+                    <li>TCP/IP networking</li>
+                    <li>Linux &amp; Windows</li>
+                    <li>RF fundamentals</li>
+                  </ul>
+                  <p class="skill-usage label-mono mb-0">
+                    <span>Daily at work</span
+                    ><span
+                      class="meter"
+                      role="img"
+                      aria-label="Daily at work: 3 of 3"
+                      ><i class="on"></i><i class="on"></i><i class="on"></i
+                    ></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3 reveal">
+              <div class="card skill-card h-100">
+                <div class="card-body d-flex flex-column">
+                  <span class="label-mono sys-label">SYS 03</span>
+                  <i class="bi bi-code-slash skill-icon" aria-hidden="true"></i>
+                  <h3 class="h5">Software</h3>
+                  <ul class="badge-list" aria-label="Software skills">
+                    <li>JavaScript</li>
+                    <li>Node.js</li>
+                    <li>Python</li>
+                    <li>SQL</li>
+                    <li>HTML / CSS / Bootstrap</li>
+                    <li>Git &amp; GitHub</li>
+                  </ul>
+                  <p class="skill-usage label-mono mb-0">
+                    <span>In projects</span
+                    ><span
+                      class="meter"
+                      role="img"
+                      aria-label="In projects: 2 of 3"
+                      ><i class="on"></i><i class="on"></i><i></i
+                    ></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3 reveal">
+              <div class="card skill-card h-100">
+                <div class="card-body d-flex flex-column">
+                  <span class="label-mono sys-label">SYS 04</span>
+                  <i class="bi bi-people skill-icon" aria-hidden="true"></i>
+                  <h3 class="h5">Professional</h3>
+                  <ul class="badge-list" aria-label="Professional skills">
+                    <li>Root-cause analysis</li>
+                    <li>Technical writing</li>
+                    <li>Shift handover</li>
+                    <li>Customer communication</li>
+                    <li>[REPLACE: language]</li>
+                  </ul>
+                  <p class="skill-usage label-mono mb-0">
+                    <span>Every shift</span
+                    ><span
+                      class="meter"
+                      role="img"
+                      aria-label="Every shift: 3 of 3"
+                      ><i class="on"></i><i class="on"></i><i class="on"></i
+                    ></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+         03 / PROJECTS — featured card (full width, horizontal on large screens) + a 2 × 2 grid
+         To add a project: copy a <div class="... project-item"> block.
+         data-category words must match the filter buttons (simulation, web, data).
+         ===================================================================== -->
+      <section
+        id="projects"
+        class="section section-alt"
+        aria-labelledby="projects-title"
+      >
+        <div class="container">
+          <p class="waypoint-label label-mono reveal">03 / Projects</p>
+          <h2 id="projects-title" class="section-title reveal">
+            Selected work
+          </h2>
+
+          <div
+            class="filter-bar reveal"
+            role="group"
+            aria-label="Filter projects by category"
+          >
+            <span class="label-mono" aria-hidden="true">Mode</span>
+            <button
+              type="button"
+              class="btn-filter"
+              data-filter="all"
+              aria-pressed="true"
+            >
+              All
+            </button>
+            <button
+              type="button"
+              class="btn-filter"
+              data-filter="simulation"
+              aria-pressed="false"
+            >
+              Simulation
+            </button>
+            <button
+              type="button"
+              class="btn-filter"
+              data-filter="web"
+              aria-pressed="false"
+            >
+              Web
+            </button>
+            <button
+              type="button"
+              class="btn-filter"
+              data-filter="data"
+              aria-pressed="false"
+            >
+              Data &amp; tools
+            </button>
+          </div>
+          <p id="filterStatus" class="visually-hidden" aria-live="polite"></p>
+
+          <div class="row g-4" id="projectGrid">
+            <!-- Project 1 (FEATURED: full width, image left on large screens) -->
+            <div
+              class="col-12 project-item reveal"
+              data-category="simulation web"
+            >
+              <article class="card project-card project-card--featured h-100">
+                <div class="project-media">
+                  <!-- [REPLACE] screenshot 1200x675 (16:9), .webp -->
+                  <img
+                    src="assets/images/project-1.svg"
+                    loading="lazy"
+                    width="1200"
+                    height="675"
+                    alt="Placeholder screenshot for the Sim Telemetry Dashboard"
+                  />
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <p class="fig label-mono">
+                    Fig. 01 · Simulation <span class="chip">Featured</span>
+                  </p>
+                  <h3 class="h4 card-title">Sim Telemetry Dashboard</h3>
+                  <p class="card-text">
+                    Live browser dashboard showing simulator health — motion,
+                    visuals and host status — at a glance.
+                  </p>
+                  <dl class="spec">
+                    <div>
+                      <dt>Stack</dt>
+                      <dd>JavaScript · Chart.js · Python · WebSockets</dd>
+                    </div>
+                    <div>
+                      <dt>Role</dt>
+                      <dd>Solo developer</dd>
+                    </div>
+                    <div class="result">
+                      <dt>Result</dt>
+                      <dd>[REPLACE: e.g. Pre-session check 10 → 2 min]</dd>
+                    </div>
+                  </dl>
+                  <div class="card-actions">
+                    <a
+                      href="https://github.com/[REPLACE-username]/portfolio/blob/main/docs/PROJECT-CASE-STUDIES.md#1-sim-telemetry-dashboard"
+                      class="btn btn-secondary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Sim Telemetry Dashboard case study (opens in new tab)"
+                      ><i class="bi bi-journal-text" aria-hidden="true"></i>
+                      Case study</a
+                    >
+                    <a
+                      href="https://github.com/[REPLACE-username]/sim-telemetry-dashboard"
+                      class="btn btn-outline-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Sim Telemetry Dashboard source code on GitHub (opens in new tab)"
+                      ><i class="bi bi-github" aria-hidden="true"></i> GitHub</a
+                    >
+                    <a
+                      href="https://[REPLACE-demo-link]"
+                      class="btn btn-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Sim Telemetry Dashboard live demo (opens in new tab)"
+                      ><i
+                        class="bi bi-box-arrow-up-right"
+                        aria-hidden="true"
+                      ></i>
+                      Live</a
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Project 2 -->
+            <div
+              class="col-12 col-md-6 project-item reveal"
+              data-category="data simulation"
+            >
+              <article class="card project-card h-100">
+                <div class="project-media">
+                  <img
+                    src="assets/images/project-2.svg"
+                    loading="lazy"
+                    width="1200"
+                    height="675"
+                    alt="Placeholder screenshot for the Fault Log Analyzer"
+                  />
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <p class="fig label-mono">Fig. 02 · Data</p>
+                  <h3 class="h5 card-title">Fault Log Analyzer</h3>
+                  <p class="card-text">
+                    Parses simulator fault logs and ranks repeat offenders so
+                    fixes target root causes.
+                  </p>
+                  <dl class="spec">
+                    <div>
+                      <dt>Stack</dt>
+                      <dd>Python · pandas · SQLite</dd>
+                    </div>
+                    <div>
+                      <dt>Role</dt>
+                      <dd>Solo developer</dd>
+                    </div>
+                    <div class="result">
+                      <dt>Result</dt>
+                      <dd>[REPLACE: measured result]</dd>
+                    </div>
+                  </dl>
+                  <div class="card-actions">
+                    <a
+                      href="https://github.com/[REPLACE-username]/fault-log-analyzer"
+                      class="btn btn-outline-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Fault Log Analyzer source code on GitHub (opens in new tab)"
+                      ><i class="bi bi-github" aria-hidden="true"></i> GitHub</a
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Project 3 -->
+            <div
+              class="col-12 col-md-6 project-item reveal"
+              data-category="simulation web"
+            >
+              <article class="card project-card h-100">
+                <div class="project-media">
+                  <img
+                    src="assets/images/project-3.svg"
+                    loading="lazy"
+                    width="1200"
+                    height="675"
+                    alt="Placeholder screenshot for the Web Instrument Panel"
+                  />
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <p class="fig label-mono">Fig. 03 · Simulation</p>
+                  <h3 class="h5 card-title">Web Instrument Panel</h3>
+                  <p class="card-text">
+                    Attitude indicator, altimeter and airspeed gauges in the
+                    browser, driven by sim data.
+                  </p>
+                  <dl class="spec">
+                    <div>
+                      <dt>Stack</dt>
+                      <dd>SVG · JavaScript · CSS</dd>
+                    </div>
+                    <div>
+                      <dt>Role</dt>
+                      <dd>Solo developer</dd>
+                    </div>
+                    <div class="result">
+                      <dt>Result</dt>
+                      <dd>[REPLACE: measured result]</dd>
+                    </div>
+                  </dl>
+                  <div class="card-actions">
+                    <a
+                      href="https://github.com/[REPLACE-username]/web-instrument-panel"
+                      class="btn btn-outline-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Web Instrument Panel source code on GitHub (opens in new tab)"
+                      ><i class="bi bi-github" aria-hidden="true"></i> GitHub</a
+                    >
+                    <a
+                      href="https://[REPLACE-demo-link]"
+                      class="btn btn-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Web Instrument Panel live demo (opens in new tab)"
+                      ><i
+                        class="bi bi-box-arrow-up-right"
+                        aria-hidden="true"
+                      ></i>
+                      Live</a
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Project 4 -->
+            <div
+              class="col-12 col-md-6 project-item reveal"
+              data-category="web data"
+            >
+              <article class="card project-card h-100">
+                <div class="project-media">
+                  <img
+                    src="assets/images/project-4.svg"
+                    loading="lazy"
+                    width="1200"
+                    height="675"
+                    alt="Placeholder screenshot for the Maintenance Task Tracker"
+                  />
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <p class="fig label-mono">Fig. 04 · Web</p>
+                  <h3 class="h5 card-title">Maintenance Task Tracker</h3>
+                  <p class="card-text">
+                    Full-stack app replacing a shared spreadsheet for shift
+                    tasks, parts and handovers.
+                  </p>
+                  <dl class="spec">
+                    <div>
+                      <dt>Stack</dt>
+                      <dd>Node.js · Express · PostgreSQL</dd>
+                    </div>
+                    <div>
+                      <dt>Role</dt>
+                      <dd>Full-stack developer</dd>
+                    </div>
+                    <div class="result">
+                      <dt>Result</dt>
+                      <dd>[REPLACE: measured result]</dd>
+                    </div>
+                  </dl>
+                  <div class="card-actions">
+                    <a
+                      href="https://github.com/[REPLACE-username]/maintenance-tracker"
+                      class="btn btn-outline-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Maintenance Task Tracker source code on GitHub (opens in new tab)"
+                      ><i class="bi bi-github" aria-hidden="true"></i> GitHub</a
+                    >
+                    <a
+                      href="https://[REPLACE-demo-link]"
+                      class="btn btn-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Maintenance Task Tracker live demo (opens in new tab)"
+                      ><i
+                        class="bi bi-box-arrow-up-right"
+                        aria-hidden="true"
+                      ></i>
+                      Live</a
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <!-- Project 5 -->
+            <div
+              class="col-12 col-md-6 project-item reveal"
+              data-category="web"
+            >
+              <article class="card project-card h-100">
+                <div class="project-media">
+                  <img
+                    src="assets/images/project-5.svg"
+                    loading="lazy"
+                    width="1200"
+                    height="675"
+                    alt="Placeholder screenshot for the FCC GROL Practice Quiz"
+                  />
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <p class="fig label-mono">Fig. 05 · Web</p>
+                  <h3 class="h5 card-title">FCC GROL Practice Quiz</h3>
+                  <p class="card-text">
+                    Spaced-repetition quiz for FCC Elements 1 &amp; 3, with
+                    accuracy tracked per topic.
+                  </p>
+                  <dl class="spec">
+                    <div>
+                      <dt>Stack</dt>
+                      <dd>HTML · JavaScript · JSON</dd>
+                    </div>
+                    <div>
+                      <dt>Role</dt>
+                      <dd>Solo developer</dd>
+                    </div>
+                    <div class="result">
+                      <dt>Result</dt>
+                      <dd>[REPLACE: measured result]</dd>
+                    </div>
+                  </dl>
+                  <div class="card-actions">
+                    <a
+                      href="https://github.com/[REPLACE-username]/grol-quiz"
+                      class="btn btn-outline-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="FCC GROL Practice Quiz source code on GitHub (opens in new tab)"
+                      ><i class="bi bi-github" aria-hidden="true"></i> GitHub</a
+                    >
+                    <a
+                      href="https://[REPLACE-demo-link]"
+                      class="btn btn-primary"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="FCC GROL Practice Quiz live demo (opens in new tab)"
+                      ><i
+                        class="bi bi-box-arrow-up-right"
+                        aria-hidden="true"
+                      ></i>
+                      Live</a
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+         04 / EXPERIENCE — "flight path" timeline, newest first.
+         The current job has class "is-current" (filled amber waypoint).
+         ===================================================================== -->
+      <section
+        id="experience"
+        class="section"
+        aria-labelledby="experience-title"
+      >
+        <div class="container">
+          <p class="waypoint-label label-mono reveal">04 / Experience</p>
+          <h2 id="experience-title" class="section-title reveal">
+            Flight path
+          </h2>
+
+          <ol class="route">
+            <li class="route-item is-current reveal">
+              <p class="route-date label-mono">[REPLACE: YYYY] – Now</p>
+              <span class="waypoint" aria-hidden="true"></span>
+              <div class="route-card">
+                <h3 class="h5">Aircraft Simulator Engineer</h3>
+                <p class="route-org">CAE · Dallas, TX</p>
+                <ul>
+                  <li>
+                    Maintain and troubleshoot full-flight simulators across
+                    motion, visual, avionics and host systems. [REPLACE with
+                    specifics]
+                  </li>
+                  <li>
+                    Cut repeat-fault downtime by [REPLACE: X%] by tracing
+                    intermittent faults to root cause and documenting fixes.
+                  </li>
+                  <li>
+                    Support qualification checks so training schedules stay on
+                    time. [REPLACE]
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="route-item reveal">
+              <p class="route-date label-mono">
+                [REPLACE: YYYY] – [REPLACE: YYYY]
+              </p>
+              <span class="waypoint" aria-hidden="true"></span>
+              <div class="route-card">
+                <h3 class="h5">
+                  [REPLACE: Previous role, e.g. Electronics Technician]
+                </h3>
+                <p class="route-org">
+                  [REPLACE: Company] · [REPLACE: City, State]
+                </p>
+                <ul>
+                  <li>
+                    [REPLACE: Achievement with a number, e.g. "Repaired 200+
+                    boards at 95% first-pass yield."]
+                  </li>
+                  <li>
+                    [REPLACE: Achievement showing initiative or teamwork.]
+                  </li>
+                  <li>
+                    [REPLACE: Achievement showing a tool or process you
+                    improved.]
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="route-item reveal">
+              <p class="route-date label-mono">[REPLACE: YYYY] – Now</p>
+              <span class="waypoint" aria-hidden="true"></span>
+              <div class="route-card">
+                <h3 class="h5">Full-stack development (personal projects)</h3>
+                <p class="route-org">Self-directed</p>
+                <ul>
+                  <li>
+                    Built and deployed [REPLACE: N] web apps with JavaScript,
+                    Node.js, Python and SQL.
+                  </li>
+                  <li>
+                    Completed AI-powered full-stack training: front end, APIs,
+                    databases and deployment.
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+         05 / CREDENTIALS — pre-flight checklist.
+         Done item: <li class="done"> with bi-check2-square.
+         In progress: <li class="pending"> with bi-hourglass-split + chip.
+         ===================================================================== -->
+      <section
+        id="education"
+        class="section section-alt"
+        aria-labelledby="education-title"
+      >
+        <div class="container">
+          <p class="waypoint-label label-mono reveal">05 / Credentials</p>
+          <h2 id="education-title" class="section-title reveal">Checklist</h2>
+          <div class="row g-4">
+            <div class="col-12 col-md-6 reveal">
+              <div class="card cred-card h-100">
+                <div class="card-body">
+                  <h3 class="h5">
+                    <i class="bi bi-mortarboard" aria-hidden="true"></i>
+                    Education
+                  </h3>
+                  <ul class="checklist">
+                    <li class="done">
+                      <i class="bi bi-check2-square" aria-hidden="true"></i>
+                      <div>
+                        <strong
+                          >[REPLACE: Degree, e.g. A.A.S. Electronics Engineering
+                          Technology]</strong
+                        >
+                        <span class="meta"
+                          >[REPLACE: School] · [REPLACE: Year]</span
+                        >
+                      </div>
+                    </li>
+                    <li class="done">
+                      <i class="bi bi-check2-square" aria-hidden="true"></i>
+                      <div>
+                        <strong
+                          >AI-Powered Full-Stack Development Training</strong
+                        >
+                        <span class="meta"
+                          >[REPLACE: Provider] · [REPLACE: Year]</span
+                        >
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 reveal">
+              <div class="card cred-card h-100">
+                <div class="card-body">
+                  <h3 class="h5">
+                    <i class="bi bi-patch-check" aria-hidden="true"></i>
+                    Certifications
+                  </h3>
+                  <ul class="checklist">
+                    <li class="pending">
+                      <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                      <div>
+                        <strong
+                          >FCC General Radiotelephone Operator License
+                          (GROL)</strong
+                        >
+                        <span class="chip">In progress</span>
+                        <span class="meta"
+                          >Elements 1 &amp; 3 · target [REPLACE: Month
+                          YYYY]</span
+                        >
+                      </div>
+                    </li>
+                    <li class="done">
+                      <i class="bi bi-check2-square" aria-hidden="true"></i>
+                      <div>
+                        <strong
+                          >[REPLACE: Certification, e.g. CompTIA A+ / IPC
+                          J-STD-001]</strong
+                        >
+                        <span class="meta"
+                          >[REPLACE: Issuer] · [REPLACE: Year]</span
+                        >
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+         06 / CONTACT — direct email (with copy button) + Formspree form
+         1. Create a free form at https://formspree.io
+         2. Replace YOUR_FORM_ID in the form's action URL.
+         Until then the form opens the visitor's email app (mailto fallback).
+         ===================================================================== -->
+      <section id="contact" class="section" aria-labelledby="contact-title">
+        <div class="container">
+          <p class="waypoint-label label-mono reveal">06 / Contact</p>
+          <h2 id="contact-title" class="section-title reveal">
+            Open a channel
+          </h2>
+          <div class="row g-4 g-lg-5">
+            <div class="col-lg-5 reveal">
+              <p class="fs-5">
+                Hiring for simulator, avionics or software roles? I'd like to
+                hear from you.
+              </p>
+              <div class="contact-email">
+                <i class="bi bi-envelope" aria-hidden="true"></i>
+                <!-- [REPLACE] your email (also in data-email below and in the form) -->
+                <a href="mailto:[REPLACE]@email.com" id="emailLink"
+                  >[REPLACE]@email.com</a
+                >
+                <button
+                  type="button"
+                  class="btn-icon"
+                  id="copyEmail"
+                  data-email="[REPLACE]@email.com"
+                  aria-label="Copy email address"
+                >
+                  <i class="bi bi-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+              <p
+                class="copy-status"
+                id="copyStatus"
+                role="status"
+                aria-live="polite"
+              ></p>
+              <p class="label-mono mb-1">Response time</p>
+              <p class="mb-0"><strong>Within 48 hours</strong></p>
+              <div
+                class="social-links"
+                role="group"
+                aria-label="Social profiles"
+              >
+                <a
+                  href="https://www.linkedin.com/in/[REPLACE]"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="LinkedIn profile (opens in new tab)"
+                  ><i class="bi bi-linkedin" aria-hidden="true"></i
+                ></a>
+                <a
+                  href="https://github.com/[REPLACE-username]"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="GitHub profile (opens in new tab)"
+                  ><i class="bi bi-github" aria-hidden="true"></i
+                ></a>
+                <a
+                  href="https://www.youtube.com/@[REPLACE]"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="YouTube channel (opens in new tab)"
+                  ><i class="bi bi-youtube" aria-hidden="true"></i
+                ></a>
+              </div>
+            </div>
+
+            <div class="col-lg-7 reveal">
+              <!-- novalidate: we show Bootstrap-styled messages instead of browser bubbles -->
+              <form
+                id="contactForm"
+                class="contact-panel needs-validation"
+                novalidate
+                action="https://formspree.io/f/YOUR_FORM_ID"
+                method="POST"
+                data-fallback-email="[REPLACE]@email.com"
+              >
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      autocomplete="name"
+                      required
+                      minlength="2"
+                      aria-describedby="name-error"
+                    />
+                    <div class="invalid-feedback" id="name-error">
+                      Please enter your name.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      autocomplete="email"
+                      required
+                      aria-describedby="email-error"
+                    />
+                    <div class="invalid-feedback" id="email-error">
+                      Please enter a valid email address.
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="subject"
+                      name="subject"
+                      required
+                      aria-describedby="subject-error"
+                    />
+                    <div class="invalid-feedback" id="subject-error">
+                      Please add a subject.
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea
+                      class="form-control"
+                      id="message"
+                      name="message"
+                      rows="5"
+                      required
+                      minlength="10"
+                      aria-describedby="message-error"
+                    ></textarea>
+                    <div class="invalid-feedback" id="message-error">
+                      Please write a message (at least 10 characters).
+                    </div>
+                  </div>
+                  <!-- Honeypot: hidden from people; bots fill it and Formspree drops them -->
+                  <div class="visually-hidden" aria-hidden="true">
+                    <label for="gotcha">Leave this field empty</label>
+                    <input
+                      type="text"
+                      id="gotcha"
+                      name="_gotcha"
+                      tabindex="-1"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="col-12">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg"
+                      id="submitBtn"
+                    >
+                      <i class="bi bi-send" aria-hidden="true"></i>
+                      <span class="btn-label">Send message</span>
+                    </button>
+                  </div>
+                </div>
+                <!-- Result message; screen readers announce it -->
+                <div
+                  id="formStatus"
+                  class="form-status"
+                  role="status"
+                  aria-live="polite"
+                ></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+    <footer class="site-footer">
+      <div
+        class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center text-md-start"
+      >
+        <p class="label-mono">Bereket Gebremedhin · End of flight plan</p>
+        <p>
+          &copy; <span id="year">2026</span> · Built with HTML, CSS &amp;
+          Bootstrap ·
+          <a
+            href="https://github.com/[REPLACE-username]/portfolio"
+            target="_blank"
+            rel="noopener"
+            >Source on GitHub</a
+          >
+        </p>
+        <a href="#home" class="back-to-top"
+          ><i class="bi bi-arrow-up" aria-hidden="true"></i> Back to top</a
+        >
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS (navbar collapse + ScrollSpy). "defer" = doesn't block rendering -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+    <script src="js/main.js" defer></script>
+  </body>
+</html>

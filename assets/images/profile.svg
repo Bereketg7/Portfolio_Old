@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" role="img" aria-label="Profile photo placeholder">
+  <!-- [REPLACE] placeholder: swap for your 4:5 portrait (e.g. profile.webp, 800x1000) -->
+  <rect width="480" height="600" fill="#1A2840"/>
+  <circle cx="240" cy="230" r="95" fill="#2A3B57"/>
+  <path d="M60 600c15-150 90-230 180-230s165 80 180 230z" fill="#2A3B57"/>
+  <text x="240" y="560" fill="#F5B748" font-family="Arial, sans-serif" font-size="26" text-anchor="middle">[REPLACE] your photo</text>
+</svg>

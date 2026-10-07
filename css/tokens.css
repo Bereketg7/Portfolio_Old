@@ -1,0 +1,330 @@
+/* =========================================================
+   NIGHT COCKPIT — design tokens
+   Light mode is the :root default; dark mode overrides below.
+   Bootstrap 5.3 switches themes with data-bs-theme, so both
+   attribute names are supported.
+   ========================================================= */
+:root,
+[data-theme="light"],
+[data-bs-theme="light"] {
+  /* ---- Color ---- */
+  --c-bg: #F6F8FB;
+  --c-surface: #FFFFFF;
+  --c-surface-2: #EEF2F7;
+  --c-border: #D3DBE6;          /* decorative only */
+  --c-border-strong: #7A869A;   /* inputs, toggles: 3.7:1 */
+  --c-text: #13213A;            /* 16.1:1 on surface */
+  --c-muted: #4A5870;           /* 7.2:1 */
+  --c-primary: #F5A524;         /* fills only in light mode */
+  --c-primary-hover: #E0901A;
+  --c-primary-text: #8A4F00;    /* amber as text: 6.6:1 */
+  --c-on-primary: #111111;      /* 9.3:1 on amber */
+  --c-secondary: #1A2840;
+  --c-on-secondary: #FFFFFF;
+  --c-accent: #0E6C86;          /* 6.0:1 */
+  --c-success: #157F3D;         /* 5.1:1 */
+  --c-error: #B42318;           /* 6.6:1 */
+  --c-success-bg: #ECFDF3;
+  --c-error-bg: #FEF3F2;
+  --c-grid: rgba(19, 33, 58, 0.06);
+
+  /* ---- Typography ---- */
+  --font-heading: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --fs-display: clamp(2.5rem, 1.6rem + 3.6vw, 4rem);
+  --fs-h1: clamp(2.25rem, 1.8rem + 1.8vw, 3rem);
+  --fs-h2: clamp(1.75rem, 1.45rem + 1.2vw, 2.25rem);
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --fs-h4: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --fs-h5: clamp(1.0625rem, 1.03rem + 0.15vw, 1.125rem);
+  --fs-h6: 1rem;
+  --fs-lead: clamp(1.125rem, 1.06rem + 0.3vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-label: 0.75rem;
+
+  --lh-tight: 1.1;
+  --lh-heading: 1.25;
+  --lh-body: 1.65;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --tracking-tight: -0.02em;
+  --tracking-label: 0.12em;
+  --measure: 68ch;
+
+  /* ---- Spacing (8px rhythm) ---- */
+  --space-1: 0.25rem;  /* 4  */
+  --space-2: 0.5rem;   /* 8  */
+  --space-3: 1rem;     /* 16 */
+  --space-4: 1.5rem;   /* 24 */
+  --space-5: 2rem;     /* 32 */
+  --space-6: 3rem;     /* 48 */
+  --space-7: 4rem;     /* 64 */
+  --space-8: 6rem;     /* 96 */
+
+  /* ---- Shape & depth ---- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+  --border-width: 1px;
+  --shadow-sm: 0 1px 2px rgba(19, 33, 58, 0.06);
+  --shadow-md: 0 12px 32px rgba(19, 33, 58, 0.08);
+  --focus-ring: 0 0 0 3px var(--c-bg), 0 0 0 6px var(--c-primary-text);
+
+  /* ---- Icons ---- */
+  --icon-sm: 1em;
+  --icon-md: 1.25rem;  /* 20 */
+  --icon-lg: 1.5rem;   /* 24 */
+  --icon-xl: 2rem;     /* 32 */
+
+  /* ---- Motion ---- */
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+  --dur-reveal: 400ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-std: ease;
+
+  /* ---- Layout ---- */
+  --nav-h: 72px;
+  --nav-h-scrolled: 60px;
+  --tap-min: 44px;
+}
+
+[data-theme="dark"],
+[data-bs-theme="dark"] {
+  --c-bg: #0B1320;
+  --c-surface: #131E30;
+  --c-surface-2: #1A2840;
+  --c-border: #2A3B57;
+  --c-border-strong: #6B7C96;   /* 3.9:1 on surface */
+  --c-text: #E6EDF6;            /* 15.8:1 on bg */
+  --c-muted: #A3B1C6;           /* 8.6:1 */
+  --c-primary: #F5A524;
+  --c-primary-hover: #FFB941;
+  --c-primary-text: #F5B748;    /* 10.4:1 */
+  --c-on-primary: #111111;
+  --c-secondary: #24364F;
+  --c-on-secondary: #E6EDF6;
+  --c-accent: #5CC8E0;          /* 9.6:1 */
+  --c-success: #4ADE80;
+  --c-error: #F87171;
+  --c-success-bg: #0F2A1E;
+  --c-error-bg: #3A1A20;
+  --c-grid: rgba(230, 237, 246, 0.05);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   Bootstrap 5.3 overrides — map Bootstrap's variables to the
+   tokens so its components (buttons, forms, navbar, badges)
+   match without recompiling Sass.
+   ========================================================= */
+:root,
+[data-theme],
+[data-bs-theme] {
+  --bs-body-font-family: var(--font-body);
+  --bs-body-font-size: var(--fs-body);
+  --bs-body-line-height: var(--lh-body);
+  --bs-body-bg: var(--c-bg);
+  --bs-body-color: var(--c-text);
+  --bs-emphasis-color: var(--c-text);
+  --bs-secondary-color: var(--c-muted);
+  --bs-secondary-bg: var(--c-surface-2);
+  --bs-tertiary-bg: var(--c-surface);
+  --bs-heading-color: var(--c-text);
+  --bs-link-color: var(--c-accent);
+  --bs-link-hover-color: var(--c-text);
+  --bs-border-color: var(--c-border);
+  --bs-border-radius: var(--radius-sm);
+  --bs-border-radius-sm: var(--radius-xs);
+  --bs-border-radius-lg: var(--radius-md);
+  --bs-border-radius-pill: var(--radius-pill);
+  --bs-focus-ring-color: var(--c-primary-text);
+  --bs-focus-ring-width: 3px;
+  --bs-form-valid-color: var(--c-success);
+  --bs-form-valid-border-color: var(--c-success);
+  --bs-form-invalid-color: var(--c-error);
+  --bs-form-invalid-border-color: var(--c-error);
+  --bs-primary: #F5A524;
+  --bs-primary-rgb: 245, 165, 36;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--c-bg);
+  color: var(--c-text);
+}
+
+h1, h2, h3, h4, .h1, .h2, .h3, .h4, .display-1, .display-2, .display-3, .display-4 {
+  font-family: var(--font-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-tight);
+}
+h1, .h1 { font-size: var(--fs-h1); font-weight: var(--fw-bold); line-height: var(--lh-tight); }
+h2, .h2 { font-size: var(--fs-h2); font-weight: var(--fw-bold); }
+h3, .h3 { font-size: var(--fs-h3); font-weight: var(--fw-medium); letter-spacing: 0; }
+h4, .h4 { font-size: var(--fs-h4); font-weight: var(--fw-medium); letter-spacing: 0; }
+h5, .h5 { font-size: var(--fs-h5); font-weight: var(--fw-semibold); }
+h6, .h6 { font-size: var(--fs-h6); font-weight: var(--fw-semibold); }
+.lead { font-size: var(--fs-lead); }
+small, .small { font-size: var(--fs-small); }
+
+/* Mono label used for waypoints, captions, readouts */
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+/* Buttons */
+.btn {
+  --bs-btn-font-weight: var(--fw-semibold);
+  --bs-btn-padding-y: 0.75rem;
+  --bs-btn-padding-x: 1.375rem;
+  --bs-btn-border-radius: var(--radius-sm);
+  --bs-btn-focus-box-shadow: var(--focus-ring);
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: background-color var(--dur-fast) var(--ease-std),
+              border-color var(--dur-fast) var(--ease-std),
+              color var(--dur-fast) var(--ease-std);
+}
+.btn-primary {
+  --bs-btn-bg: var(--c-primary);
+  --bs-btn-border-color: var(--c-primary);
+  --bs-btn-color: var(--c-on-primary);
+  --bs-btn-hover-bg: var(--c-primary-hover);
+  --bs-btn-hover-border-color: var(--c-primary-hover);
+  --bs-btn-hover-color: var(--c-on-primary);
+  --bs-btn-active-bg: var(--c-primary-hover);
+  --bs-btn-active-border-color: var(--c-primary-hover);
+  --bs-btn-active-color: var(--c-on-primary);
+  --bs-btn-disabled-bg: var(--c-primary);
+  --bs-btn-disabled-border-color: var(--c-primary);
+  --bs-btn-disabled-color: var(--c-on-primary);
+  --bs-btn-disabled-opacity: 0.45;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--c-primary-text);
+  --bs-btn-border-color: var(--c-primary);
+  --bs-btn-border-width: 2px;
+  --bs-btn-hover-bg: var(--c-primary);
+  --bs-btn-hover-border-color: var(--c-primary);
+  --bs-btn-hover-color: var(--c-on-primary);
+  --bs-btn-active-bg: var(--c-primary-hover);
+  --bs-btn-active-border-color: var(--c-primary-hover);
+  --bs-btn-active-color: var(--c-on-primary);
+  --bs-btn-disabled-color: var(--c-primary-text);
+  --bs-btn-disabled-border-color: var(--c-primary);
+}
+.btn-secondary {
+  --bs-btn-bg: var(--c-secondary);
+  --bs-btn-border-color: var(--c-border-strong);
+  --bs-btn-color: var(--c-on-secondary);
+  --bs-btn-hover-bg: var(--c-secondary);
+  --bs-btn-hover-border-color: var(--c-primary);
+  --bs-btn-hover-color: var(--c-on-secondary);
+  --bs-btn-active-bg: var(--c-secondary);
+  --bs-btn-active-border-color: var(--c-primary);
+  --bs-btn-active-color: var(--c-on-secondary);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled, .btn.disabled { cursor: not-allowed; }
+
+/* Cards */
+.card {
+  --bs-card-bg: var(--c-surface);
+  --bs-card-border-color: var(--c-border);
+  --bs-card-border-radius: var(--radius-md);
+  --bs-card-inner-border-radius: calc(var(--radius-md) - 1px);
+  --bs-card-spacer-y: var(--space-4);
+  --bs-card-spacer-x: var(--space-4);
+  --bs-card-color: var(--c-text);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  min-height: 48px;
+  font-size: 1rem;              /* 16px stops iOS zoom on focus */
+  background-color: var(--c-surface);
+  color: var(--c-text);
+  border: var(--border-width) solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+}
+.form-control::placeholder { color: var(--c-muted); opacity: 1; }
+.form-control:hover { border-color: color-mix(in srgb, var(--c-text) 60%, transparent); }
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--c-surface);
+  color: var(--c-text);
+  border-color: var(--c-primary-text);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 25%, transparent);
+}
+.form-label { font-weight: var(--fw-medium); font-size: 0.9rem; }
+
+/* Navbar */
+.navbar {
+  --bs-navbar-color: var(--c-muted);
+  --bs-navbar-hover-color: var(--c-text);
+  --bs-navbar-active-color: var(--c-text);
+  --bs-navbar-brand-color: var(--c-text);
+  --bs-navbar-brand-hover-color: var(--c-text);
+  --bs-navbar-toggler-border-color: var(--c-border-strong);
+  --bs-navbar-toggler-focus-width: 3px;
+  --bs-navbar-nav-link-padding-x: 0.9rem;
+}
+.navbar-toggler { min-width: var(--tap-min); min-height: var(--tap-min); }
+
+/* Badges */
+.badge {
+  --bs-badge-font-weight: var(--fw-medium);
+  --bs-badge-border-radius: var(--radius-pill);
+  --bs-badge-color: var(--c-text);
+}
+
+/* Focus: one ring everywhere */
+:focus-visible {
+  outline: 3px solid var(--c-primary-text);
+  outline-offset: 3px;
+}
+
+/* Custom spacing utilities Bootstrap's CDN build lacks */
+.mb-32 { margin-bottom: var(--space-5) !important; }
+.gap-32 { gap: var(--space-5) !important; }
+.py-64 { padding-block: var(--space-7) !important; }
+.section { padding-block: var(--space-7); }
+@media (min-width: 992px) { .section { padding-block: var(--space-8); } }
+
+/* Reveal motion + reduced-motion fallback */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--dur-reveal) var(--ease-out),
+              transform var(--dur-reveal) var(--ease-out);
+}
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js .reveal { opacity: 1; transform: none; }
+}
